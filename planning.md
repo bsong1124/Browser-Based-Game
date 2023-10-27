@@ -7,26 +7,25 @@ Here is the wireframe:
 
 
 
-//Pseudocode below: **JavaScript**
-
-Do I want to delete current screen and have a big "COMPUTER/PLAYER WINS!" as a game ending option?
-
+Pseudocode below: **JavaScript**
 
 1. Set up variables to link each element of the DOM. Maybe use boolean value to determine current attacker?
    AddEventListeners
 
 2. Likely use a loop to iterate through an array nested in an object to link grid positions: variables for each grid element = tedious and bad code
-  const object = {
-    xAxis:[a b c etc]
-    yAxis:[1 2 3 etc]
-    }
+   - ```
+         const object = {
+            xAxis:[a b c etc]
+            yAxis:[1 2 3 etc]
+         }
 
 3. Use a class system to create both computer's and player's ships: maybe use hitPoint for game ending condition?
-   class Ships{
-     .name
-     .length
-     .hitPoint
-  }
+   - ```
+      class Ships{
+        .name
+        .length
+        .hitPoint
+      }
 
 4. Create functions for main gameplay: Should I use while loop to continue running game? Or nested functions like Tamagotchi...
    1. start()
@@ -77,13 +76,14 @@ Do I want to delete current screen and have a big "COMPUTER/PLAYER WINS!" as a g
 
    12. continueGame() might need?
       - if while loops is used for gameOver() condition, then don't need continueGame()
-      - ie: 
-            ```while (hitPoints of all computer/player ships >0){
+      - ie:  
+        ```
+           while (hitPoints of all computer/player ships >0){
               mainGameFunctions() -> currentAttacker = player/computer
               if(hitPoints of all player ships === 0 || hitPoints of all computer ships ===0){
                 break
               }
-        }```
+            }
 
    13. runGame() might need?
       - do I want function to create ships for player and computer and have it called on JS load?
