@@ -1,3 +1,34 @@
-*{
-    background-color: salmon;
+body{
+    background-color: darkgrey;
+    /* margin: 0px; */
 }
+header{
+    text-align: center;
+}
+.grid-container{
+    display:grid;
+    border:solid red 1px;
+    grid-template-columns: 40vmin 110vmin 40vmin;
+}
+.control-panel-flex-container{
+    display:flex;
+    border: solid blue 1px;
+    flex-direction: column;
+}
+.table-container{
+    display:flex;
+    border:solid green 1px;
+    flex-direction: column;
+}
+.ship-container{
+    display:flex;
+    border:solid yellow 1px;
+    flex-direction: column;
+}
+th{
+    border:solid red 1px;
+}
+
+
+
+

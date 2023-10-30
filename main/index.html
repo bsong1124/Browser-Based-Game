@@ -8,6 +8,70 @@
     <script src="battleship.js"></script>
 </head>
 <body>
-    <h1>Battleship</h1>
+    <header>
+        <h1>Battleship</h1>
+    </header>
+
+    <main class="grid-container">
+        <section class="control-panel-flex-container">
+            <div class="instructions">
+                <h2>Instructions:</h2>
+            </div>
+
+            <div class="instructions-steps">
+                <p>1. Press "Rotate Ships" to flip ships vertial or horizontal</p>
+                <p>2. Place all "Player" pieces before "START"</p>
+            </div>
+
+            <div class="start-reset">
+                <button id="start">start</button>
+                <button id="reset">reset</button>
+            </div>
+
+            <div id="turn-display">
+                <p>Turn</p>
+            </div>
+
+            <div id="winner-display">
+                <p>Winner</p>
+            </div>
+        </section>
+
+        <section class="table-container">
+            <div id="computer-table">
+                <table>
+                    <tr>
+                        <th class="xaxis-header"></th>
+                        <th class="xaxis-header">1</th>
+                        <th class="xaxis-header">2</th>
+                        <th class="xaxis-header">3</th>
+                        <th class="xaxis-header">4</th>
+                        <th class="xaxis-header">5</th>
+                        <th class="xaxis-header">6</th>
+                        <th class="xaxis-header">7</th>
+                        <th class="xaxis-header">8</th>
+                        <th class="xaxis-header">9</th>
+                    </tr>
+
+                </table>
+            </div>
+
+            <div id="player-table">
+                <table>
+
+                </table>
+            </div>
+        </section>
+
+        <section class="ship-container">
+            <div id="computer-ship">
+
+            </div>
+
+            <div id="player-ship"></div>
+
+            <button>Rotate Ship</button>
+        </section>
+    </main>
 </body>
 </html>

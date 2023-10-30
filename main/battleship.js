@@ -30,3 +30,11 @@ class Player {
     ];
   }
 }
+
+init()
+
+function init(){
+  for(let i=0; i<=9;i++){
+    
+  }
+}
