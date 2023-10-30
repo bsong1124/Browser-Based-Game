@@ -9,33 +9,38 @@ Here is the wireframe:
 
 Pseudocode below: **JavaScript**
 
-1. Set up variables to link each element of the DOM. Maybe use boolean value to determine current attacker?
-   AddEventListeners
+1. Set up variables to link each element of the DOM. Use boolean value to determine current attacker->AddEventListeners
 
-2. Likely use a loop to iterate through an array nested in an object to link grid positions: variables for each grid element = tedious and bad code
+2. Create a class of Player for player/computer: will contain properties of ship and grid
    - ```
-         const object = {
-            xAxis:[a b c etc]
-            yAxis:[1 2 3 etc]
-         }
-
-3. Use a class system to create both computer's and player's ships: maybe use hitPoint for game ending condition?
-   - ```
-      class Ships{
-        .name
-        .length
-        .hitPoint
+      class Player{
+        .grid{[a-i], [1-9] -> grid creation here}
+        .ship{name,length,hitpoints}
       }
 
-4. Create functions for main gameplay: Should I use while loop to continue running game? Or nested functions like Tamagotchi...
-   1. start()
+3. Create a grid inside Player class: Use a loop to iterate through xAxis and yAxis->create element and append to container
+   - ```
+         for(x in xAxis){
+            for(y in yAxis){
+               let gridSpace = document.createElement('div')
+               gridSpace.setAttribute('id',`${x}${y}`)
+               container.appendChild(gridSpace)
+            }
+         }
+
+4. Create functions for main gameplay: 
+   1. init()
+      - initialize classes/grid/starting ships
+      - this is the time to place ships
+
+   1. start() event handler
       - make sure ALL player ships have been placed && ALL computer ships have been randomly placed
       - starts game
       - player can now click grid space to fireMissile()
-      - Should I create easy normal hard difficulties?
+      - ICEBOX: create easy normal hard difficulties
 
    2. rotateShips()
-      - rotate ships vertial or horizontal for ship placement
+      - rotate ships vertial or back to horizontal for ship placement
 
    3. dragShips()
       - allow for dragging of the ships for ship placement. Do I need a funcion for this? Or some other method?
@@ -51,48 +56,38 @@ Pseudocode below: **JavaScript**
       - same logics as placePlayerShips()
       - computer board = true && player board = false
 
-   6. clickGrid() || attackShip() || fireMissile()
+   6. firePlayerMissile()
+      - call firePlayerMissileValid()
       - determine grid position for clicked grid space and call hitDetection()
 
-   7. Do I need hitDetection()? or just fireMissle()
-      - if i need hitDetection() it would probably be inside fireMissle()
-      - check to see if fireMissle() hit the computer ship
-      - possibly use boolean value to determine hit or miss?
+   7. hitDetection()
+      - check to see if missile hit a ship
 
    8. computerAi()
       - fireMissle() at random grid spaces
       - if positive return on hit, target grid spaces directly next to it...top bottom left right
       - do not target grid space previously attacked before
 
-   9. fireMissileValid()
+   9. firePlayerMissileValid()
       - check to see if player targeted a valid grid space
-      - valid = not previously attacked && not player's board
+      - valid = not previously attacked && not own player's board
 
    10. ranNum()
-      - need random number generator for computerAi()...and maybe more?
+      - need random number generator for computerAi() + etc
 
    11. updateGameBoard()
       - keeps ship hits and misses in memory for previous mentioned functions()
 
-   12. continueGame() might need?
-      - if while loops is used for gameOver() condition, then don't need continueGame()
-      - ie:  
-        ```
-           while (hitPoints of all computer/player ships >0){
-              mainGameFunctions() -> currentAttacker = player/computer
-              if(hitPoints of all player ships === 0 || hitPoints of all computer ships ===0){
-                break
-              }
-            }
+   12. runGame() 
+      - check for continuation of game or gamerOver()
 
-   13. runGame() might need?
-      - do I want function to create ships for player and computer and have it called on JS load?
-      - OR do I want to manually use Class syntax to createthem myself...
+   13. continueGame()
+      - called every ship hit
 
    14. gameOver()
       - stops all running functions
-      - Do I want to delete current screen and have a big "COMPUTER/PLAYER WINS!" as a game ending option?
       - log somewhere the game winner -> Player/Computer
+      - ICEBOX: change screen to one big "PLAYER/COMPUTER WINS!"
 
 
 
