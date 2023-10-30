@@ -6,6 +6,8 @@ class Player {
 
     this.grid = {
       // grid creation here
+      xAxis: ['a','b','c','d','e','f','g','h','i'],
+      yAxis: [1,2,3,4,5,6,7,8,9]
     };
 
     this.ships = [

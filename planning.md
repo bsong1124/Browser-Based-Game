@@ -80,9 +80,10 @@ Pseudocode below: **JavaScript**
 
    12. runGame() 
       - check for continuation of game or gamerOver()
+      - if hitpoints of all ships=0 -> gameOver()
 
    13. continueGame()
-      - called every ship hit
+      - called on every ship hit
 
    14. gameOver()
       - stops all running functions
