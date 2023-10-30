@@ -28,6 +28,15 @@ header{
 th{
     border:solid red 1px;
 }
+div{
+    border:solid red 1px;
+}
+button{
+    border: solid red 1px;
+}
+td{
+    border:solid red 1px;
+}
 
 
 
