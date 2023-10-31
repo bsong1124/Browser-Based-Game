@@ -8,8 +8,6 @@ const rotateButton = document.querySelector("#rotate-button");
 const startButton = document.querySelector("#start-button");
 const resetButton = document.querySelector("#reset-button");
 const yAxis = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-let horizontal = true;
-let vertical = false;
 let player;
 let computer;
 // eventlisteners
@@ -33,7 +31,7 @@ class Player {
   }
   // Methods
   tableCreation() {
-    let numId = 1
+    let numId = 1;
     for (let i = 1; i <= yAxis.length; i++) {
       let createRow = document.createElement("tr");
       this.tableDOM.appendChild(createRow);
@@ -45,7 +43,7 @@ class Player {
         createCell.classList.add(this.name);
         createCell.setAttribute("id", numId);
         createRow.appendChild(createCell);
-        numId++
+        numId++;
       }
     }
   }
@@ -57,11 +55,11 @@ class Player {
       this.shipDOM.appendChild(createShip);
       if (this.shipDOM === playerShip) {
         createShip.draggable = true;
+        // console.log(this.name, createShip)
       }
     }
   }
 }
-// console.log(this.name, createShip)
 
 init();
 
@@ -76,12 +74,10 @@ function init() {
 
 function start() {}
 
-const playerShipDivs = document.querySelectorAll("#player-ship>div");
-const computerShipDivs = document.querySelectorAll("#computer-ship>div");
-console.log(computerShipDivs);
-console.log(playerShipDivs);
+const playerCells = document.querySelectorAll("#player > td");
 
 function rotateShip() {
+  const playerShipDivs = document.querySelectorAll("#player-ship>div");
   playerShipDivs.forEach(function (shipDiv) {
     if (shipDiv.classList.contains("horizontal")) {
       shipDiv.style.transform = "rotate(90deg)";
@@ -94,18 +90,36 @@ function rotateShip() {
 }
 
 function randomRotateShip() {
+  const computerShipDivs = document.querySelectorAll("#computer-ship>div");
   computerShipDivs.forEach(function (shipDiv) {
     if (ranBoolean()) {
       shipDiv.style.transform = "rotate(90deg)";
+      shipDiv.classList.add("vertical");
     } else {
       shipDiv.style.transform = "rotate(0deg)";
+      shipDiv.classList.add("horizontal");
     }
   });
 }
 
-function randomPlaceComputerShip() {
+function randomPlaceComputerShip(ship) {
   randomRotateShip();
-  let randomCell = Math.floor();
+  const computerCells = document.querySelectorAll("#computer>td");
+  const ranNum = Math.floor(Math.random() * 81);
+  let cellStart;
+  if (ship.classList.contains("horizontal")) {
+    if (ranNum <= 81 - ship.length) {
+      cellStart = ranNum;
+    } else {
+      cellStart = 81 - ship.length;
+    }
+  } else if (ship.classList.contains("vertical")) {
+    if (ranNum <= 81 - 9 * (ship.length - 1)) {
+      cellStart = ranNum;
+    } else {
+      cellStart = 81 - 9 * (ship.length - 1);
+    }
+  }
 }
 
 function ranBoolean() {
@@ -114,4 +128,5 @@ function ranBoolean() {
 
 function fireMissile() {}
 function placePlayerShips() {}
-console.log(ranBoolean);
+console.log(ranBoolean());
+// console.log(player.ships[].length)
