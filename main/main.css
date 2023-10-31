@@ -85,10 +85,8 @@ td{
     background-color: green;
     width:18vw;
 }
-
-#computer>tr>#i30,#computer>tr>#i39,#computer>tr>#i48{
-    background-color:white;
-
+#computer > tr > .placed{
+    background-color: yellow;
 }
 
 
