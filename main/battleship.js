@@ -31,7 +31,6 @@ class Player {
   }
   // Methods
   tableCreation() {
-    let numId = 1;
     for (let i = 1; i <= yAxis.length; i++) {
       let createRow = document.createElement("tr");
       this.tableDOM.appendChild(createRow);
@@ -41,18 +40,19 @@ class Player {
       for (let j = 1; j < 10; j++) {
         let createCell = document.createElement("td");
         createCell.classList.add(this.name);
-        createCell.setAttribute("id", numId);
+        createCell.setAttribute("id", 'x'+i+'y'+j);
         createRow.appendChild(createCell);
-        numId++;
       }
     }
   }
   shipCreation() {
     for (let ship of this.ships) {
       let createShip = document.createElement("div");
+      createShip.innerText = `${ship.length}x`
       createShip.setAttribute("id", ship.name);
       createShip.classList.add(ship.name, "horizontal");
       this.shipDOM.appendChild(createShip);
+      ship.coordinates; 
       if (this.shipDOM === playerShip) {
         createShip.draggable = true;
         // console.log(this.name, createShip)
@@ -60,6 +60,7 @@ class Player {
     }
   }
 }
+
 
 init();
 
@@ -74,7 +75,9 @@ function init() {
 
 function start() {}
 
-const playerCells = document.querySelectorAll("#player > td");
+const playerCells = document.querySelectorAll("#player > tr > td");
+const computerCells = document.querySelectorAll("#computer > tr > td");
+console.log(computerCells[0])
 
 function rotateShip() {
   const playerShipDivs = document.querySelectorAll("#player-ship>div");
@@ -104,7 +107,6 @@ function randomRotateShip() {
 
 function randomPlaceComputerShip(ship) {
   randomRotateShip();
-  const computerCells = document.querySelectorAll("#computer>td");
   const ranNum = Math.floor(Math.random() * 81);
   let cellStart;
   if (ship.classList.contains("horizontal")) {
@@ -113,14 +115,23 @@ function randomPlaceComputerShip(ship) {
     } else {
       cellStart = 81 - ship.length;
     }
+    for(let i=cellStart;i<cellStart+ship.length;i++){
+      computerCells[i].classList.add(ship.name)
+      computerCells[i].classList.add('placed')
+    }
   } else if (ship.classList.contains("vertical")) {
     if (ranNum <= 81 - 9 * (ship.length - 1)) {
       cellStart = ranNum;
     } else {
       cellStart = 81 - 9 * (ship.length - 1);
     }
+    for(let i=cellStart;i<=cellStart+9*(ship.length-1);i+9){
+      computerCells[i].classList.add(ship.name)
+      computerCells[i].classList.add('placed')
+    }
   }
 }
+randomPlaceComputerShip(computer.ships)
 
 function ranBoolean() {
   return Math.random() < 0.5;
@@ -128,5 +139,4 @@ function ranBoolean() {
 
 function fireMissile() {}
 function placePlayerShips() {}
-console.log(ranBoolean());
-// console.log(player.ships[].length)
+console.log(player.ships[3].length)
