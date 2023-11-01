@@ -56,7 +56,7 @@ class Player {
       let createShip = document.createElement("div");
       createShip.innerText = `${ship.length}x`;
       createShip.setAttribute("id", ship.name);
-      createShip.classList.add(ship.name, "horizontal");
+      createShip.classList.add(ship.name, ship.name+'-placeholder', "horizontal");
       this.shipDOM.appendChild(createShip);
       if (this.shipDOM === playerShip) {
         createShip.draggable = true;
@@ -73,19 +73,19 @@ class Player {
         const ranY = Math.floor(Math.random() * 9) + 1;
         if (ranBoolean()) {
           if (ranY + ship.length - 1 <= 9) {
-            if (this.randomSetShip(ship, ranY, ranX, true)) {
+            if (this.setShip(ship, ranY, ranX, true)) {
               break;
             }
           }
         } else if (ranX + ship.length - 1 <= 9) {
-          if (this.randomSetShip(ship, ranY, ranX, false)) {
+          if (this.setShip(ship, ranY, ranX, false)) {
             break;
           }
         }
       }
     }, this);
   }
-  randomSetShip(ship, ranY, ranX, isHorizontal) {
+  setShip(ship, ranY, ranX, isHorizontal) {
     if (isHorizontal) {
       for (let i = ranY; i < ranY + ship.length; i++) {
         let cellId = "x" + ranX + "y" + i;
@@ -98,6 +98,7 @@ class Player {
         let cellId = "x" + ranX + "y" + i;
         const cell = this.tableDOM.querySelector("#" + cellId);
         cell.classList.add("placed");
+        cell.classList.add(ship.name)
         ship.coord.push(cellId);
       }
     } else {
@@ -112,52 +113,29 @@ class Player {
         let cellId = "x" + i + "y" + ranY;
         const cell = this.tableDOM.querySelector("#" + cellId);
         cell.classList.add("placed");
+        cell.classList.add(ship.name)
         ship.coord.push(cellId);
       }
     }
     return true;
   }
-  placePlayerShips(e) {
+  checkValidPlayerCell(e) {
     const shipCells = [e.target.id];
     for (const ship of player.ships) {
-      if(!dragging.classList.contains(ship.name)){continue}
-      const isHorizontal = dragging.classList.contains("horizontal") 
+      if (!dragging.classList.contains(ship.name)) {
+        continue;
+      }
+      const isHorizontal = dragging.classList.contains("horizontal");
       const cellMatch = e.target.id.match(/x(\d+)y(\d+)/);
       const cellX = parseInt(cellMatch[1]);
       const cellY = parseInt(cellMatch[2]);
-      if (isHorizontal && cellY <= 9 - (ship.length - 1)) {
-        for (let i = 1; i < ship.length; i++) {
-          const addShipCells = 'x'+cellX+'y'+(cellY+i)
-          shipCells.push(addShipCells);
-          console.log(shipCells)
-        }
-      } else if (!isHorizontal && cellX <= 9 - (ship.length - 1)) {
-        for (let i = 1; i < ship.length; i++) {
-          const addShipCells = "x" + (cellX + i) + "y" + cellY;
-          shipCells.push(addShipCells)
-          console.log(shipCells)
-        }
+      if(player.setShip(ship, cellY, cellX, isHorizontal)){
+        dragging.draggable = false
+        dragging.hidden = true
       }
     }
   }
 }
-// if (
-//   dragging.classList.contains("horizontal") &&
-//   dragging.classList.contains(ship.name)
-// ) {
-// else if (dragging.classList.contains(ship.name)) {
-//     const shipCells = [e.target.id];
-//     const cellMatch = e.target.id.match(/x(\d+)(y\d+)/);
-//     if (parseInt(cellMatch[1]) <= 9 - (ship.length - 1))
-//       for (let i = 1; i < ship.length; i++) {
-//         const cellX = parseInt(cellMatch[1]) + i;
-//         const cellY = cellMatch[2];
-//         const addShipCells = "x" + cellX + cellY;
-//         shipCells.push(addShipCells);
-//       }
-//       console.log(shipCells);
-//     }
-//   }
 
 init();
 
@@ -168,24 +146,19 @@ const playerCells = document.querySelectorAll("#player > tr > td");
 
 draggableShips.forEach(function (ship) {
   ship.addEventListener("dragstart", dragStart);
-  // drag.addEventListener("dragend", placePlayerShips);
 });
 
 playerCells.forEach(function (cell) {
   cell.addEventListener("dragover", dragOver);
-  cell.addEventListener("drop", player.placePlayerShips);
+  cell.addEventListener("drop", player.checkValidPlayerCell);
 });
 
 function dragStart(e) {
   dragging = e.target;
-  console.log(dragging);
 }
 function dragOver(e) {
   e.preventDefault();
 }
-// function placePlayerShips(e) {
-//   console.log(e.target.id)
-// }
 
 function init() {
   computer = new Player("Computer", computerTable, computerShip);
@@ -196,7 +169,6 @@ function init() {
   player.shipCreation();
   computer.randomCellCheck();
 }
-// console.log(computer.ships[0].coord);
 
 function start() {}
 
@@ -217,22 +189,5 @@ function ranBoolean() {
 }
 
 function fireMissile() {}
-// console.log(player.ships[3].length);
 
-// const computerCells = document.querySelectorAll("#computer > tr > td");
 
-// for (let ship of computerShipDivs) {
-//   if (ship.classList.contains("submarine")) {
-//     computerSubmarine = ship;
-//     computerShipArray.push(computerSubmarine);
-//   } else if (ship.classList.contains("cruiser")) {
-//     computerCruiser = ship;
-//     computerShipArray.push(computerCruiser);
-//   } else if (ship.classList.contains("battleship")) {
-//     computerBattleship = ship;
-//     computerShipArray.push(computerBattleship);
-//   } else if (ship.classList.contains("carrier")) {
-//     computerCarrier = ship;
-//     computerShipArray.push(computerCarrier);
-//   }
-// }
