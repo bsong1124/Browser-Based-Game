@@ -120,35 +120,44 @@ class Player {
   placePlayerShips(e) {
     const shipCells = [e.target.id];
     for (const ship of player.ships) {
-      if (
-        dragging.classList.contains("horizontal") &&
-        dragging.classList.contains(ship.name)
-      ) {
-        const cellMatch = e.target.id.match(/(x\d+)y(\d+)/);
-        if (parseInt(cellMatch[2]) <= 9 - (ship.length - 1)) {
-          for (let i = 1; i < ship.length; i++) {
-            const cellX = cellMatch[1];
-            const cellY = parseInt(cellMatch[2]) + i;
-            const addShipCells = cellX + "y" + cellY;
-            shipCells.push(addShipCells);
-          }
+      if(!dragging.classList.contains(ship.name)){continue}
+      const isHorizontal = dragging.classList.contains("horizontal") 
+      const cellMatch = e.target.id.match(/x(\d+)y(\d+)/);
+      const cellX = parseInt(cellMatch[1]);
+      const cellY = parseInt(cellMatch[2]);
+      if (isHorizontal && cellY <= 9 - (ship.length - 1)) {
+        for (let i = 1; i < ship.length; i++) {
+          const addShipCells = 'x'+cellX+'y'+(cellY+i)
+          shipCells.push(addShipCells);
+          console.log(shipCells)
         }
-        console.log(shipCells);
-      } else if (dragging.classList.contains(ship.name)) {
-        const shipCells = [e.target.id];
-        const cellMatch = e.target.id.match(/x(\d+)(y\d+)/);
-        if (parseInt(cellMatch[1]) <= 9 - (ship.length - 1))
-          for (let i = 1; i < ship.length; i++) {
-            const cellX = parseInt(cellMatch[1]) + i;
-            const cellY = cellMatch[2];
-            const addShipCells = "x" + cellX + cellY;
-            shipCells.push(addShipCells);
-          }
-          console.log(shipCells);
+      } else if (!isHorizontal && cellX <= 9 - (ship.length - 1)) {
+        for (let i = 1; i < ship.length; i++) {
+          const addShipCells = "x" + (cellX + i) + "y" + cellY;
+          shipCells.push(addShipCells)
+          console.log(shipCells)
         }
-      } 
+      }
+    }
   }
 }
+// if (
+//   dragging.classList.contains("horizontal") &&
+//   dragging.classList.contains(ship.name)
+// ) {
+// else if (dragging.classList.contains(ship.name)) {
+//     const shipCells = [e.target.id];
+//     const cellMatch = e.target.id.match(/x(\d+)(y\d+)/);
+//     if (parseInt(cellMatch[1]) <= 9 - (ship.length - 1))
+//       for (let i = 1; i < ship.length; i++) {
+//         const cellX = parseInt(cellMatch[1]) + i;
+//         const cellY = cellMatch[2];
+//         const addShipCells = "x" + cellX + cellY;
+//         shipCells.push(addShipCells);
+//       }
+//       console.log(shipCells);
+//     }
+//   }
 
 init();
 
