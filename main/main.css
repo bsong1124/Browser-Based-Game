@@ -63,6 +63,7 @@ div{
 }
 button{
     border: solid red 1px;
+    cursor: pointer;
 }
 td{
     border:solid white 1px;
@@ -85,7 +86,13 @@ td{
     background-color: green;
     width:18vw;
 }
+#player-ship > div{
+    cursor: pointer;
+}
 #computer > tr > .placed{
+    background-color: yellow;
+}
+#player>tr>.placed{
     background-color: yellow;
 }
 

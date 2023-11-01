@@ -10,18 +10,19 @@ const resetButton = document.querySelector("#reset-button");
 const yAxis = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 let player;
 let computer;
-let computerShipArray = [];
-let computerSubmarine;
-let computerCruiser;
-let computerBattleship;
-let computerCarrier;
+let dragging;
+// let computerShipArray = [];
+// let computerSubmarine;
+// let computerCruiser;
+// let computerBattleship;
+// let computerCarrier;
+
 // eventlisteners
 startButton.addEventListener("click", start);
 rotateButton.addEventListener("click", rotateShip);
 computerTable.addEventListener("click", fireMissile);
-playerTable.addEventListener("click", placePlayerShips);
+// playerTable.addEventListener("click", player.placePlayerShips);
 
-// Example Class
 class Player {
   constructor(name, tableDOM, shipDOM) {
     this.name = name;
@@ -57,35 +58,34 @@ class Player {
       createShip.setAttribute("id", ship.name);
       createShip.classList.add(ship.name, "horizontal");
       this.shipDOM.appendChild(createShip);
-      ship.coordinates;
       if (this.shipDOM === playerShip) {
         createShip.draggable = true;
-        // console.log(this.name, createShip)
+        createShip.classList.add("draggable");
       }
+      // console.log(ship.name)
     }
   }
-  randomPlaceShips() {
+  randomCellCheck() {
     this.ships.forEach(function (ship) {
-      const shipLength = ship.length;
       while (true) {
         // infinite loop choose two random points as a candidate for ship coords
         const ranX = Math.floor(Math.random() * 9) + 1;
         const ranY = Math.floor(Math.random() * 9) + 1;
         if (ranBoolean()) {
           if (ranY + ship.length - 1 <= 9) {
-            if (this.setShip(ship, ranY, ranX, true)) {
+            if (this.randomSetShip(ship, ranY, ranX, true)) {
               break;
             }
           }
         } else if (ranX + ship.length - 1 <= 9) {
-          if (this.setShip(ship, ranY, ranX, false)) {
+          if (this.randomSetShip(ship, ranY, ranX, false)) {
             break;
           }
         }
       }
     }, this);
   }
-  setShip(ship, ranY, ranX, isHorizontal) {
+  randomSetShip(ship, ranY, ranX, isHorizontal) {
     if (isHorizontal) {
       for (let i = ranY; i < ranY + ship.length; i++) {
         let cellId = "x" + ranX + "y" + i;
@@ -98,6 +98,7 @@ class Player {
         let cellId = "x" + ranX + "y" + i;
         const cell = this.tableDOM.querySelector("#" + cellId);
         cell.classList.add("placed");
+        ship.coord.push(cellId);
       }
     } else {
       for (let i = ranX; i < ranX + ship.length; i++) {
@@ -111,9 +112,41 @@ class Player {
         let cellId = "x" + i + "y" + ranY;
         const cell = this.tableDOM.querySelector("#" + cellId);
         cell.classList.add("placed");
+        ship.coord.push(cellId);
       }
     }
     return true;
+  }
+  placePlayerShips(e) {
+    const shipCells = [e.target.id];
+    for (const ship of player.ships) {
+      if (
+        dragging.classList.contains("horizontal") &&
+        dragging.classList.contains(ship.name)
+      ) {
+        const cellMatch = e.target.id.match(/(x\d+)y(\d+)/);
+        if (parseInt(cellMatch[2]) <= 9 - (ship.length - 1)) {
+          for (let i = 1; i < ship.length; i++) {
+            const cellX = cellMatch[1];
+            const cellY = parseInt(cellMatch[2]) + i;
+            const addShipCells = cellX + "y" + cellY;
+            shipCells.push(addShipCells);
+          }
+        }
+        console.log(shipCells);
+      } else if (dragging.classList.contains(ship.name)) {
+        const shipCells = [e.target.id];
+        const cellMatch = e.target.id.match(/x(\d+)(y\d+)/);
+        if (parseInt(cellMatch[1]) <= 9 - (ship.length - 1))
+          for (let i = 1; i < ship.length; i++) {
+            const cellX = parseInt(cellMatch[1]) + i;
+            const cellY = cellMatch[2];
+            const addShipCells = "x" + cellX + cellY;
+            shipCells.push(addShipCells);
+          }
+          console.log(shipCells);
+        }
+      } 
   }
 }
 
@@ -121,23 +154,28 @@ init();
 
 const computerShipDivs = document.querySelectorAll("#computer-ship>div");
 const playerShipDivs = document.querySelectorAll("#player-ship>div");
-// const computerCells = document.querySelectorAll("#computer > tr > td");
-// const playerCells = document.querySelectorAll("#player > tr > td");
+const draggableShips = document.querySelectorAll(".draggable");
+const playerCells = document.querySelectorAll("#player > tr > td");
 
-// for (let ship of computerShipDivs) {
-//   if (ship.classList.contains("submarine")) {
-//     computerSubmarine = ship;
-//     computerShipArray.push(computerSubmarine);
-//   } else if (ship.classList.contains("cruiser")) {
-//     computerCruiser = ship;
-//     computerShipArray.push(computerCruiser);
-//   } else if (ship.classList.contains("battleship")) {
-//     computerBattleship = ship;
-//     computerShipArray.push(computerBattleship);
-//   } else if (ship.classList.contains("carrier")) {
-//     computerCarrier = ship;
-//     computerShipArray.push(computerCarrier);
-//   }
+draggableShips.forEach(function (ship) {
+  ship.addEventListener("dragstart", dragStart);
+  // drag.addEventListener("dragend", placePlayerShips);
+});
+
+playerCells.forEach(function (cell) {
+  cell.addEventListener("dragover", dragOver);
+  cell.addEventListener("drop", player.placePlayerShips);
+});
+
+function dragStart(e) {
+  dragging = e.target;
+  console.log(dragging);
+}
+function dragOver(e) {
+  e.preventDefault();
+}
+// function placePlayerShips(e) {
+//   console.log(e.target.id)
 // }
 
 function init() {
@@ -147,8 +185,9 @@ function init() {
   player = new Player("Player", playerTable, playerShip);
   player.tableCreation();
   player.shipCreation();
-  computer.randomPlaceShips();
+  computer.randomCellCheck();
 }
+// console.log(computer.ships[0].coord);
 
 function start() {}
 
@@ -169,5 +208,22 @@ function ranBoolean() {
 }
 
 function fireMissile() {}
-function placePlayerShips() {}
-console.log(player.ships[3].length);
+// console.log(player.ships[3].length);
+
+// const computerCells = document.querySelectorAll("#computer > tr > td");
+
+// for (let ship of computerShipDivs) {
+//   if (ship.classList.contains("submarine")) {
+//     computerSubmarine = ship;
+//     computerShipArray.push(computerSubmarine);
+//   } else if (ship.classList.contains("cruiser")) {
+//     computerCruiser = ship;
+//     computerShipArray.push(computerCruiser);
+//   } else if (ship.classList.contains("battleship")) {
+//     computerBattleship = ship;
+//     computerShipArray.push(computerBattleship);
+//   } else if (ship.classList.contains("carrier")) {
+//     computerCarrier = ship;
+//     computerShipArray.push(computerCarrier);
+//   }
+// }
