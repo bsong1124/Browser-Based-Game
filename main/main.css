@@ -28,7 +28,6 @@ header{
 }
 .computer-table,.player-table{
     background-color: rgb(96, 151, 253);
-    z-index:0;
 }
 
 .ship-container{
@@ -91,7 +90,6 @@ td{
 }
 .submarine,.cruiser{
     background-color: blue;
-    z-index: 1;
 }
 .battleship{
     background-color: purple;
@@ -102,12 +100,13 @@ td{
 #player-ship > div{
     cursor: pointer;
 }
-#computer > tr > .placed{
-    background-color: yellow;
-}
-/* #player>tr>.placed{
+/* .placed{
     background-color: yellow;
 } */
+.player-hit,.computer-hit{
+    background-color: red;
+}
+.miss{}
 
 
 

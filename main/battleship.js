@@ -1,7 +1,7 @@
 console.log("js loaded");
 // Global Variables
-const computerTable = document.querySelector("#computer-table > table");
-const playerTable = document.querySelector("#player-table > table");
+const computerTable = document.querySelector("#computer");
+const playerTable = document.querySelector("#player");
 const computerShip = document.querySelector("#computer-ship");
 const playerShip = document.querySelector("#player-ship");
 const rotateButton = document.querySelector("#rotate-button");
@@ -11,6 +11,7 @@ const yAxis = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 let player;
 let computer;
 let dragging;
+let currentTurn;
 // let computerShipArray = [];
 // let computerSubmarine;
 // let computerCruiser;
@@ -20,8 +21,9 @@ let dragging;
 // eventlisteners
 startButton.addEventListener("click", start);
 rotateButton.addEventListener("click", rotateShip);
-computerTable.addEventListener("click", fireMissile);
-// playerTable.addEventListener("click", player.placePlayerShips);
+resetButton.addEventListener('click', function(){
+  location.reload()
+})
 
 class Player {
   constructor(name, tableDOM, shipDOM) {
@@ -56,7 +58,11 @@ class Player {
       let createShip = document.createElement("div");
       createShip.innerText = `${ship.length}x`;
       createShip.setAttribute("id", ship.name);
-      createShip.classList.add(ship.name, ship.name+'-placeholder', "horizontal");
+      createShip.classList.add(
+        ship.name,
+        ship.name + "-placeholder",
+        "horizontal"
+      );
       this.shipDOM.appendChild(createShip);
       if (this.shipDOM === playerShip) {
         createShip.draggable = true;
@@ -65,7 +71,7 @@ class Player {
       // console.log(ship.name)
     }
   }
-  randomCellCheck() {
+  randomizeComShips() {
     this.ships.forEach(function (ship) {
       while (true) {
         // infinite loop choose two random points as a candidate for ship coords
@@ -98,7 +104,7 @@ class Player {
         let cellId = "x" + ranX + "y" + i;
         const cell = this.tableDOM.querySelector("#" + cellId);
         cell.classList.add("placed");
-        cell.classList.add(ship.name)
+        cell.classList.add(ship.name);
         ship.coord.push(cellId);
       }
     } else {
@@ -113,7 +119,7 @@ class Player {
         let cellId = "x" + i + "y" + ranY;
         const cell = this.tableDOM.querySelector("#" + cellId);
         cell.classList.add("placed");
-        cell.classList.add(ship.name)
+        cell.classList.add(ship.name);
         ship.coord.push(cellId);
       }
     }
@@ -129,9 +135,21 @@ class Player {
       const cellMatch = e.target.id.match(/x(\d+)y(\d+)/);
       const cellX = parseInt(cellMatch[1]);
       const cellY = parseInt(cellMatch[2]);
-      if(player.setShip(ship, cellY, cellX, isHorizontal)){
-        dragging.draggable = false
-        dragging.hidden = true
+      if (player.setShip(ship, cellY, cellX, isHorizontal)) {
+        dragging.draggable = false;
+        dragging.hidden = true;
+      }
+    }
+  }
+  hitDetection(e){
+    for(const ship of this.ships){
+      if(!e.classList.contains(ship.name)){
+        continue;
+      }
+      if(e.classList.contains(ship.name)){
+        ship.hitPoints--;
+        e.classList.add(`${this.name}-hit`)
+        console.log(ship)
       }
     }
   }
@@ -161,16 +179,14 @@ function dragOver(e) {
 }
 
 function init() {
-  computer = new Player("Computer", computerTable, computerShip);
+  computer = new Player("computer", computerTable, computerShip);
   computer.tableCreation();
   computer.shipCreation();
-  player = new Player("Player", playerTable, playerShip);
+  player = new Player("player", playerTable, playerShip);
   player.tableCreation();
   player.shipCreation();
-  computer.randomCellCheck();
+  computer.randomizeComShips();
 }
-
-function start() {}
 
 function rotateShip() {
   playerShipDivs.forEach(function (shipDiv) {
@@ -184,10 +200,32 @@ function rotateShip() {
   });
 }
 
+function readyOrNot() {
+  let allPlaced = true;
+  player.ships.forEach(function (ship) {
+    if (ship.coord.length < 1) {
+      allPlaced = false;
+    }
+  });
+  return allPlaced
+}
+
+function start() {
+  if(readyOrNot()){
+    // player.hitDetection()
+    computerTable.addEventListener('click', function(event){
+      if(event.target.tagName === 'TD'){
+        computer.hitDetection(event.target)
+      }
+    })
+  }
+}
+
+// function fireMissile(e) {
+//   if
+// }
+
 function ranBoolean() {
   return Math.random() < 0.5;
 }
-
-function fireMissile() {}
-
 
