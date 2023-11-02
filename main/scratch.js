@@ -67,6 +67,7 @@ class Player {
   randomizeComShips() {
     this.ships.forEach(function (ship) {
       while (true) {
+        // infinite loop choose two random points as a candidate for ship coords
         ranNumX();
         ranNumY();
         if (ranBoolean()) {
@@ -136,11 +137,6 @@ class Player {
       if (player.setShip(ship, cellY, cellX, isHorizontal)) {
         dragging.draggable = false;
         dragging.hidden = true;
-        for(let comShip of computerShipDivs){
-          if (comShip.classList.contains(ship.name)){
-            comShip.hidden = true
-          }
-        }
       }
     }
   }
@@ -205,7 +201,6 @@ playerCells.forEach(function (cell) {
 
 function dragStart(e) {
   dragging = e.target;
-  console.log(dragging)
 }
 function dragOver(e) {
   e.preventDefault();
@@ -276,7 +271,6 @@ function gameOver(user) {
   isGameOver = true;
   computerTable.remove();
   playerTable.remove();
-  turnDisplay.remove()
   let winner = document.createElement("h1");
   winner.innerText = user.name.toUpperCase() + " is the WINNER!";
   winnerDisplay.appendChild(winner);

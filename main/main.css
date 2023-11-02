@@ -1,26 +1,40 @@
 body{
-    background-color: darkgrey;
-    /* margin: 0px; */
+    background-color: rgb(132, 132, 132);
+    margin: 0px;
+    color:white;
 }
 header{
     text-align: center;
 }
 .main-container{
     display:grid;
-    border:solid red 1px;
-    grid-template-columns: 40vmin 70vmin 60vmin;
+    grid-template-columns: 20vw 25vw 20vw;
     height:90vmin;
     justify-content: center;
 }
 .control-panel-flex-container{
+    font-size: .81vw;
     display:flex;
-    border: solid blue 1px;
     flex-direction: column;
-    gap:2vw;
+    gap:1.1vw;
+    margin-top: 3vw;
+    height:40vw;
+    width: 20vw;
+    align-items: center;
+    border: solid  rgb(96, 151, 253) .1vw;
+}
+.instructions-steps, #game-info,#turn-display,#info-display{
+    font-weight: bold;
+}
+#start-button,#reset-button,#rotate-button{
+    font-size: .8vw;
+    border:solid  rgb(96, 151, 253) .1vw;
+}
+#rotate-button{
+    margin-top: .3vw;
 }
 .table-container{
     display:flex;
-    border:solid green 1px;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -32,39 +46,30 @@ header{
 
 .ship-container{
     display:flex;
-    border:solid yellow 1px;
     flex-direction: column;
     align-items: center;
 }
-h4{
-    margin-top: 0;
-    border:solid green 1px;
-    font-size: 1vw;
-}
-#player-ship-header{
-    margin-top: 3vw;
-}
 #player-ship, #computer-ship{
     display:flex;
-    width:100%;
-    height:40%;
+    height:14vw;
+    width:20vw;
     justify-content: center;
     align-items: center;
-    gap:1rem;
+    gap:.3vw;
     flex-wrap: wrap;
+    border: solid  rgb(96, 151, 253) .1vw;
+}
+.ship-header{
+    margin-top: 3.4vw;
+    font-size: 1vw;
 }
 th{
     border:solid white 1px;
     text-transform: uppercase;
-    /* font-size: 2rem;; */
     height:1.7vw;
     width:1.7vw;
 }
-div{
-    border:solid red 1px;
-}
 button{
-    border: solid red 1px;
     cursor: pointer;
 }
 td{
@@ -74,19 +79,20 @@ td{
     color:white;
     font-size: .8vw;
     text-align: center;
-    height: 1.7vw;
+    height: 1.3vw;
+    border: solid black .1vw;
 }
 #submarine,#cruiser{
     background-color: blue;
-    width: 5.1vw;
+    width: 4.4vw;
 }
 #battleship{
     background-color: purple;
-    width:6.8vw;
+    width:5.4vw;
 }
 #carrier{
     background-color: green;
-    width:8.5vw;
+    width:6.5vw;
 }
 .submarine,.cruiser{
     background-color: blue;
@@ -102,9 +108,6 @@ td{
 }
 .invisible{
     background-color: rgb(96, 151, 253);
-}
-.placed{
-    background-color: yellow;
 }
 .hit{
     background-color: red;
