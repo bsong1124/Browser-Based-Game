@@ -7,6 +7,9 @@ const playerShip = document.querySelector("#player-ship");
 const rotateButton = document.querySelector("#rotate-button");
 const startButton = document.querySelector("#start-button");
 const resetButton = document.querySelector("#reset-button");
+const turnDisplay = document.querySelector('#turn-display')
+const infoDisplay = document.querySelector('#info-display')
+const winnerDisplay = document.querySelector('#winner-display')
 const yAxis = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 let player;
 let computer;
@@ -56,7 +59,7 @@ class Player {
   shipCreation() {
     for (let ship of this.ships) {
       let createShip = document.createElement("div");
-      createShip.innerText = `${ship.length}x`;
+      createShip.innerText = `${ship.name} ${ship.length}x`;
       createShip.setAttribute("id", ship.name);
       createShip.classList.add(
         ship.name,
@@ -68,7 +71,6 @@ class Player {
         createShip.draggable = true;
         createShip.classList.add("draggable");
       }
-      // console.log(ship.name)
     }
   }
   randomizeComShips() {
@@ -106,6 +108,9 @@ class Player {
         cell.classList.add("placed");
         cell.classList.add(ship.name);
         ship.coord.push(cellId);
+        if(this.name === 'computer'){
+          cell.classList.add('invisible')
+        }
       }
     } else {
       for (let i = ranX; i < ranX + ship.length; i++) {
@@ -121,6 +126,9 @@ class Player {
         cell.classList.add("placed");
         cell.classList.add(ship.name);
         ship.coord.push(cellId);
+        if(this.name === 'computer'){
+          cell.classList.add('invisible')
+        }
       }
     }
     return true;
@@ -142,14 +150,28 @@ class Player {
     }
   }
   hitDetection(e){
+    let hp = 0
     for(const ship of this.ships){
+      hp+= ship.hitPoints
       if(!e.classList.contains(ship.name)){
         continue;
       }
-      if(e.classList.contains(ship.name)){
+      if(e.classList.contains(ship.name) && !e.classList.contains('hit')){
         ship.hitPoints--;
-        e.classList.add(`${this.name}-hit`)
-        console.log(ship)
+        hp--
+        e.classList.add('hit')
+      }
+      if(ship.hitPoints === 0){
+        let newInfo = document.createElement('p')
+        newInfo.innerText = this.name+' '+ship.name+' sunk'
+        infoDisplay.appendChild(newInfo)
+      }
+    }
+    if(hp === 0){
+      if(this.name === 'computer'){
+        gameOver(player)
+      }else{
+        gameOver(computer)
       }
     }
   }
@@ -214,11 +236,18 @@ function start() {
   if(readyOrNot()){
     // player.hitDetection()
     computerTable.addEventListener('click', function(event){
-      if(event.target.tagName === 'TD'){
+      if((event.target.tagName === 'TD') && (!event.target.classList.contains('hit'))){
         computer.hitDetection(event.target)
       }
     })
   }
+}
+
+function gameOver(user){
+  let winner = document.createElement('p')
+  winner.innerText = user.name.toUpperCase()+ ' is the WINNER!'
+  winnerDisplay.appendChild(winner)
+  console.log('game over')
 }
 
 // function fireMissile(e) {
