@@ -5,18 +5,18 @@ body{
 header{
     text-align: center;
 }
-.control-panel-flex-container{
-    display:flex;
-    border: solid blue 1px;
-    flex-direction: column;
-}
 .main-container{
     display:grid;
     border:solid red 1px;
     grid-template-columns: 40vmin 70vmin 60vmin;
     height:90vmin;
     justify-content: center;
-    /* align-items: center; */
+}
+.control-panel-flex-container{
+    display:flex;
+    border: solid blue 1px;
+    flex-direction: column;
+    gap:2vw;
 }
 .table-container{
     display:flex;

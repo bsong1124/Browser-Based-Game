@@ -9,11 +9,12 @@ const startButton = document.querySelector("#start-button");
 const resetButton = document.querySelector("#reset-button");
 const turnDisplay = document.querySelector("#turn-display>p");
 const infoDisplay = document.querySelector("#info-display");
-const winnerDisplay = document.querySelector("#winner-display");
+const winnerDisplay = document.querySelector(".winner-display");
 const yAxis = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 let player;
 let computer;
 let dragging;
+let isGameOver = false;
 // let computerShipArray = [];
 // let computerSubmarine;
 // let computerCruiser;
@@ -164,7 +165,7 @@ class Player {
       }
       if (ship.hitPoints === 0) {
         let newInfo = document.createElement("p");
-        newInfo.innerText = this.name + " " + ship.name + " sunk";
+        newInfo.innerText = this.name + "'s " + ship.name + " sunk";
         infoDisplay.appendChild(newInfo);
       }
     }
@@ -239,8 +240,8 @@ function ready() {
 let currentTurn = player;
 
 function start() {
-  if (ready()) {
-    turnDisplay.innerText = currentTurn.name + "s turn";
+  if (ready() && !isGameOver) {
+    turnDisplay.innerText = (currentTurn.name + "'s turn").toUpperCase();
     computerTable.addEventListener("click", function (event) {
       if (
         currentTurn === player &&
@@ -250,54 +251,51 @@ function start() {
       ) {
         computer.hitDetection(event.target);
         currentTurn = computer;
-        turnDisplay.innerText = currentTurn.name + "s turn";
-        setTimeout(computerClick, 0);
+        turnDisplay.innerText = (currentTurn.name+"'s turn").toUpperCase();
+        setTimeout(computerClick, 1000);
       }
     });
   }
 }
 
 function computerClick() {
-  let clicked = false;
-  while (!clicked) {
-    ranNumX();
-    ranNumY();
-    const cellId = "x" + ranX + "y" + ranY;
-    const cell = playerTable.querySelector("#" + cellId);
-    playerTable.addEventListener("click", function (event) {
-      player.hitDetection(event.target);
-    });
-    if (
-      (currentTurn =
-        computer &&
-        !cell.classList.contains("hit") &&
-        !cell.classList.contains("miss"))
-    ) {
-      cell.click();
-      currentTurn = player;
-      clicked = true;
+  if (currentTurn === computer) {
+    let clicked = false;
+    while (!clicked) {
+      ranNumX();
+      ranNumY();
+      const cellId = "x" + ranX + "y" + ranY;
+      const cell = playerTable.querySelector("#" + cellId);
+      if (!cell.classList.contains("hit") && !cell.classList.contains("miss")) {
+        player.hitDetection(cell);
+        currentTurn = player;
+        turnDisplay.innerText = (currentTurn.name+"'s turn").toUpperCase();
+        clicked = true;
+      }
     }
   }
 }
-// cell.click();
-// playerTable.addEventListener("click", function (event) {
-//   if (
-//     currentTurn === computer &&
+// if (
+//   (currentTurn =
+//     computer &&
 //     !cell.classList.contains("hit") &&
-//     !cell.classList.contains("miss")
-//   ) {
-//     player.hitDetection(event.target);
-//     currentTurn = player;
-//     currentTurn.innerText = currnetTurn.name + "s turn";
-//     clicked = true;
-//   }
+//     !cell.classList.contains("miss"))
+// ) {
+//   cell.click();
+//   currentTurn = player;
+//   clicked = true;
+// }
+// playerTable.addEventListener("click", function (event) {
+//   player.hitDetection(event.target);
 // });
 
 function gameOver(user) {
-  let winner = document.createElement("p");
+  isGameOver = true;
+  computerTable.remove();
+  playerTable.remove();
+  let winner = document.createElement("h1");
   winner.innerText = user.name.toUpperCase() + " is the WINNER!";
   winnerDisplay.appendChild(winner);
-  console.log("game over");
 }
 
 function ranNumX() {
