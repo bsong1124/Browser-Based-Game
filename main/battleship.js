@@ -245,7 +245,7 @@ function start() {
   if (ready()) {
     if (currentTurn === player) {
       computerTable.addEventListener("click", function (event) {
-      if (
+        if (
           event.target.tagName === "TD" &&
           !event.target.classList.contains("hit")
         ) {
