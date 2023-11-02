@@ -14,7 +14,6 @@ const yAxis = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 let player;
 let computer;
 let dragging;
-let currentTurn = player;
 // let computerShipArray = [];
 // let computerSubmarine;
 // let computerCruiser;
@@ -77,8 +76,8 @@ class Player {
     this.ships.forEach(function (ship) {
       while (true) {
         // infinite loop choose two random points as a candidate for ship coords
-        ranNumX()
-        ranNumY()
+        ranNumX();
+        ranNumY();
         if (ranBoolean()) {
           if (ranY + ship.length - 1 <= 9) {
             if (this.setShip(ship, ranY, ranX, true)) {
@@ -168,12 +167,12 @@ class Player {
       }
     }
     let turn = document.querySelector("#turn-display>p");
-    if ((currentTurn = player)) {
+    if (currentTurn === player) {
       currentTurn = computer;
-      turn.innerText = currentTurn.name + "s turn";
+      turn.innerText = currentTurn.name + "'s turn";
     } else {
       currentTurn = player;
-      turn.innerText = currentTurn.name + "s turn";
+      turn.innerText = currentTurn.name + "'s turn";
     }
     if (hp === 0) {
       if (this.name === "computer") {
@@ -230,7 +229,7 @@ function rotateShip() {
   });
 }
 
-function readyOrNot() {
+function ready() {
   let allPlaced = true;
   player.ships.forEach(function (ship) {
     if (ship.coord.length < 1) {
@@ -240,18 +239,20 @@ function readyOrNot() {
   return allPlaced;
 }
 
+let currentTurn = player;
+
 function start() {
-  if (readyOrNot()) {
-    if ((currentTurn = player)) {
+  if (ready()) {
+    if (currentTurn === player) {
       computerTable.addEventListener("click", function (event) {
-        if (
+      if (
           event.target.tagName === "TD" &&
           !event.target.classList.contains("hit")
         ) {
           computer.hitDetection(event.target);
         }
       });
-    } else if ((currentTurn = computer)) {
+    } else if (currentTurn === computer) {
     }
   }
 }
