@@ -7,7 +7,7 @@ const playerShip = document.querySelector("#player-ship");
 const rotateButton = document.querySelector("#rotate-button");
 const startButton = document.querySelector("#start-button");
 const resetButton = document.querySelector("#reset-button");
-const turnDisplay = document.querySelector("#turn-display");
+const turnDisplay = document.querySelector("#turn-display>p");
 const infoDisplay = document.querySelector("#info-display");
 const winnerDisplay = document.querySelector("#winner-display");
 const yAxis = [1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -150,6 +150,7 @@ class Player {
   }
   hitDetection(e) {
     let hp = 0;
+    let isHit = false;
     for (const ship of this.ships) {
       hp += ship.hitPoints;
       if (!e.classList.contains(ship.name)) {
@@ -159,6 +160,7 @@ class Player {
         ship.hitPoints--;
         hp--;
         e.classList.add("hit");
+        isHit = true;
       }
       if (ship.hitPoints === 0) {
         let newInfo = document.createElement("p");
@@ -166,13 +168,8 @@ class Player {
         infoDisplay.appendChild(newInfo);
       }
     }
-    let turn = document.querySelector("#turn-display>p");
-    if (currentTurn === player) {
-      currentTurn = computer;
-      turn.innerText = currentTurn.name + "'s turn";
-    } else {
-      currentTurn = player;
-      turn.innerText = currentTurn.name + "'s turn";
+    if (!isHit) {
+      e.classList.add("miss");
     }
     if (hp === 0) {
       if (this.name === "computer") {
@@ -243,19 +240,58 @@ let currentTurn = player;
 
 function start() {
   if (ready()) {
-    if (currentTurn === player) {
-      computerTable.addEventListener("click", function (event) {
-        if (
-          event.target.tagName === "TD" &&
-          !event.target.classList.contains("hit")
-        ) {
-          computer.hitDetection(event.target);
-        }
-      });
-    } else if (currentTurn === computer) {
+    turnDisplay.innerText = currentTurn.name + "s turn";
+    computerTable.addEventListener("click", function (event) {
+      if (
+        currentTurn === player &&
+        event.target.tagName === "TD" &&
+        !event.target.classList.contains("hit") &&
+        !event.target.classList.contains("miss")
+      ) {
+        computer.hitDetection(event.target);
+        currentTurn = computer;
+        turnDisplay.innerText = currentTurn.name + "s turn";
+        setTimeout(computerClick, 0);
+      }
+    });
+  }
+}
+
+function computerClick() {
+  let clicked = false;
+  while (!clicked) {
+    ranNumX();
+    ranNumY();
+    const cellId = "x" + ranX + "y" + ranY;
+    const cell = playerTable.querySelector("#" + cellId);
+    playerTable.addEventListener("click", function (event) {
+      player.hitDetection(event.target);
+    });
+    if (
+      (currentTurn =
+        computer &&
+        !cell.classList.contains("hit") &&
+        !cell.classList.contains("miss"))
+    ) {
+      cell.click();
+      currentTurn = player;
+      clicked = true;
     }
   }
 }
+// cell.click();
+// playerTable.addEventListener("click", function (event) {
+//   if (
+//     currentTurn === computer &&
+//     !cell.classList.contains("hit") &&
+//     !cell.classList.contains("miss")
+//   ) {
+//     player.hitDetection(event.target);
+//     currentTurn = player;
+//     currentTurn.innerText = currnetTurn.name + "s turn";
+//     clicked = true;
+//   }
+// });
 
 function gameOver(user) {
   let winner = document.createElement("p");
@@ -263,10 +299,12 @@ function gameOver(user) {
   winnerDisplay.appendChild(winner);
   console.log("game over");
 }
+
 function ranNumX() {
   ranX = Math.floor(Math.random() * 9) + 1;
   return ranX;
 }
+
 function ranNumY() {
   ranY = Math.floor(Math.random() * 9) + 1;
   return ranY;
@@ -275,3 +313,12 @@ function ranNumY() {
 function ranBoolean() {
   return Math.random() < 0.5;
 }
+
+// let turn = document.querySelector("#turn-display>p");
+// if (currentTurn === player) {
+//   currentTurn = computer;
+//   turn.innerText = currentTurn.name + "'s turn";
+// } else {
+//   currentTurn = player;
+//   turn.innerText = currentTurn.name + "'s turn";
+// }
