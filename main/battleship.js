@@ -7,14 +7,14 @@ const playerShip = document.querySelector("#player-ship");
 const rotateButton = document.querySelector("#rotate-button");
 const startButton = document.querySelector("#start-button");
 const resetButton = document.querySelector("#reset-button");
-const turnDisplay = document.querySelector('#turn-display')
-const infoDisplay = document.querySelector('#info-display')
-const winnerDisplay = document.querySelector('#winner-display')
+const turnDisplay = document.querySelector("#turn-display");
+const infoDisplay = document.querySelector("#info-display");
+const winnerDisplay = document.querySelector("#winner-display");
 const yAxis = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 let player;
 let computer;
 let dragging;
-let currentTurn;
+let currentTurn = player;
 // let computerShipArray = [];
 // let computerSubmarine;
 // let computerCruiser;
@@ -24,9 +24,9 @@ let currentTurn;
 // eventlisteners
 startButton.addEventListener("click", start);
 rotateButton.addEventListener("click", rotateShip);
-resetButton.addEventListener('click', function(){
-  location.reload()
-})
+resetButton.addEventListener("click", function () {
+  location.reload();
+});
 
 class Player {
   constructor(name, tableDOM, shipDOM) {
@@ -77,8 +77,8 @@ class Player {
     this.ships.forEach(function (ship) {
       while (true) {
         // infinite loop choose two random points as a candidate for ship coords
-        const ranX = Math.floor(Math.random() * 9) + 1;
-        const ranY = Math.floor(Math.random() * 9) + 1;
+        ranNumX()
+        ranNumY()
         if (ranBoolean()) {
           if (ranY + ship.length - 1 <= 9) {
             if (this.setShip(ship, ranY, ranX, true)) {
@@ -108,8 +108,8 @@ class Player {
         cell.classList.add("placed");
         cell.classList.add(ship.name);
         ship.coord.push(cellId);
-        if(this.name === 'computer'){
-          cell.classList.add('invisible')
+        if (this.name === "computer") {
+          cell.classList.add("invisible");
         }
       }
     } else {
@@ -126,8 +126,8 @@ class Player {
         cell.classList.add("placed");
         cell.classList.add(ship.name);
         ship.coord.push(cellId);
-        if(this.name === 'computer'){
-          cell.classList.add('invisible')
+        if (this.name === "computer") {
+          cell.classList.add("invisible");
         }
       }
     }
@@ -149,29 +149,37 @@ class Player {
       }
     }
   }
-  hitDetection(e){
-    let hp = 0
-    for(const ship of this.ships){
-      hp+= ship.hitPoints
-      if(!e.classList.contains(ship.name)){
+  hitDetection(e) {
+    let hp = 0;
+    for (const ship of this.ships) {
+      hp += ship.hitPoints;
+      if (!e.classList.contains(ship.name)) {
         continue;
       }
-      if(e.classList.contains(ship.name) && !e.classList.contains('hit')){
+      if (e.classList.contains(ship.name) && !e.classList.contains("hit")) {
         ship.hitPoints--;
-        hp--
-        e.classList.add('hit')
+        hp--;
+        e.classList.add("hit");
       }
-      if(ship.hitPoints === 0){
-        let newInfo = document.createElement('p')
-        newInfo.innerText = this.name+' '+ship.name+' sunk'
-        infoDisplay.appendChild(newInfo)
+      if (ship.hitPoints === 0) {
+        let newInfo = document.createElement("p");
+        newInfo.innerText = this.name + " " + ship.name + " sunk";
+        infoDisplay.appendChild(newInfo);
       }
     }
-    if(hp === 0){
-      if(this.name === 'computer'){
-        gameOver(player)
-      }else{
-        gameOver(computer)
+    let turn = document.querySelector("#turn-display>p");
+    if ((currentTurn = player)) {
+      currentTurn = computer;
+      turn.innerText = currentTurn.name + "s turn";
+    } else {
+      currentTurn = player;
+      turn.innerText = currentTurn.name + "s turn";
+    }
+    if (hp === 0) {
+      if (this.name === "computer") {
+        gameOver(player);
+      } else {
+        gameOver(computer);
       }
     }
   }
@@ -229,32 +237,40 @@ function readyOrNot() {
       allPlaced = false;
     }
   });
-  return allPlaced
+  return allPlaced;
 }
 
 function start() {
-  if(readyOrNot()){
-    // player.hitDetection()
-    computerTable.addEventListener('click', function(event){
-      if((event.target.tagName === 'TD') && (!event.target.classList.contains('hit'))){
-        computer.hitDetection(event.target)
-      }
-    })
+  if (readyOrNot()) {
+    if ((currentTurn = player)) {
+      computerTable.addEventListener("click", function (event) {
+        if (
+          event.target.tagName === "TD" &&
+          !event.target.classList.contains("hit")
+        ) {
+          computer.hitDetection(event.target);
+        }
+      });
+    } else if ((currentTurn = computer)) {
+    }
   }
 }
 
-function gameOver(user){
-  let winner = document.createElement('p')
-  winner.innerText = user.name.toUpperCase()+ ' is the WINNER!'
-  winnerDisplay.appendChild(winner)
-  console.log('game over')
+function gameOver(user) {
+  let winner = document.createElement("p");
+  winner.innerText = user.name.toUpperCase() + " is the WINNER!";
+  winnerDisplay.appendChild(winner);
+  console.log("game over");
 }
-
-// function fireMissile(e) {
-//   if
-// }
+function ranNumX() {
+  ranX = Math.floor(Math.random() * 9) + 1;
+  return ranX;
+}
+function ranNumY() {
+  ranY = Math.floor(Math.random() * 9) + 1;
+  return ranY;
+}
 
 function ranBoolean() {
   return Math.random() < 0.5;
 }
-
