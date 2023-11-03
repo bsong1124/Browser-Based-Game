@@ -1,23 +1,52 @@
-# Browser-Based-Game
+# Battleship
 
-A README.md file with these sections:
+My Battleship is a guessing game played by two users: player vs the computer. Both users will secretly place ships of varying lengths on their respective grids. Each user will take turns shooting at the opponent's grid trying to hit their hidden ships. The first user to destroy all of the opponent's ships is the winner.
 
-☐ <Your game's title>: A description of your game. Background info of the game is a nice touch.
+Unlike my browser-based game, the original Battleship is played by two players. Each player also has an additional ship called a destroyer and it has a length of 2 cells. When a player hits an opponent's ship, the opponent calls out "hit". The rest of the game is the same.
 
-☐ Screenshot(s): Images of your actual game.
+### Images of the game
 
-Note: if you edit your README.md on the github website editor, you can copy and paste image files directly to your markdown.
+#### Initial load:
 
-☐ Technologies Used: List of the technologies used, e.g., JavaScript, HTML, CSS...
+![Alt text](assets/battleship.png)
 
-☐ Getting Started: In this section include the link to your deployed game and any instructions you deem important.
+#### Rotated and placed ships:
 
-☐ Next Steps: Planned future enhancements (icebox items).
+![Alt text](<assets/rotated ships.png>)
 
-Note: Don't underestimate the value of a well crafted README.md. The README.md introduces your project to prospective employers and forms their first impression of your work!
+#### Both players attack: sunk computer's battleship
 
-☐ Frequent commits (at least 1 every day) dating back to the very beginning of the project. Never delete you repo to "start over".
+![Alt text](<assets/sunken ship.png>)
 
-Commit messages should be in the present tense, e.g., "Style game board" instead of "Styled game board".
+#### Winning screen:
 
-Be sure to create the repo on your personal GitHub account and ensure that it is "public".
+![Alt text](<assets/winner screen.png>)
+
+### Technologies used
+
+1. Javascript
+2. CSS
+3. HTML
+
+### Getting Started
+
+#### Rules:
+
+The game rules are very simple.
+
+1. Place all player ships
+2. When dragging and dropping to place the ships, the ship is dropped starting from where you let go. The dragging animation is decieving -> DO NOT RELY ON IT!
+3. Press the 'start' button
+4. Click on computer's grid and try to sink all ships. Make sure to wait for your turn indicated on the left hand display -> PLAYER'S TURN
+
+Click on this link to play the game!
+https://bsong1124.github.io/Project-1-Browser-Based-Game/
+
+### Future features
+
+1. Enhance computer's AI to check cells next to a 'hit'
+2. Style the game better
+   - graphic background
+   - graphic ships
+   - animations
+3. Better winner screen
