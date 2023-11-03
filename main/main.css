@@ -43,7 +43,6 @@ header{
 .computer-table,.player-table{
     background-color: rgb(96, 151, 253);
 }
-
 .ship-container{
     display:flex;
     flex-direction: column;
