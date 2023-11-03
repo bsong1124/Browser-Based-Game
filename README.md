@@ -1,5 +1,7 @@
 # Battleship
 
+### In main.css, change .invisible background-color to show computer ships.
+
 My Battleship is a guessing game played by two users: player vs the computer. Both users will secretly place ships of varying lengths on their respective grids. Each user will take turns shooting at the opponent's grid trying to hit their hidden ships. The first user to destroy all of the opponent's ships is the winner.
 
 Unlike my browser-based game, the original Battleship is played by two players. Each player also has an additional ship called a destroyer and it has a length of 2 cells. When a player hits an opponent's ship, the opponent calls out "hit". The rest of the game is the same.
